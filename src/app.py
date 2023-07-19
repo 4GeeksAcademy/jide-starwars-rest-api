@@ -45,6 +45,14 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+@app.route('/users', methods=['GET'])
+def handle_users():
+    
+    users = User.query.all()
+    all_users = list(map(lambda x: x.serialize(), users))
+
+    return jsonify(users), 200
+
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
