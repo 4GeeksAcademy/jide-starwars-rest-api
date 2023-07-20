@@ -6,7 +6,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
-    login_status = db.Column(db.Boolean(), unique=False, nullable=True)
+    login_status = db.Column(db.Boolean(), unique=False, nullable=True, default=False)
 
     def __repr__(self):
         return '<User %r>' % self.username

@@ -53,6 +53,15 @@ def handle_users():
 
     return jsonify(all_users), 200
 
+@app.route('/user', methods=['POST'])
+def create_user():
+    
+    request_body_user = request.get_json()
+    new_user = User(username=request_body_user["username"], password=request_body_user["password"])
+    db.session(new_user)
+    db.session.commit()
+    return jsonify(request_body_user), 200
+
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
