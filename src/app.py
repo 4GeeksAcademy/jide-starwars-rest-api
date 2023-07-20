@@ -51,7 +51,7 @@ def handle_users():
     users = User.query.all()
     all_users = list(map(lambda x: x.serialize(), users))
 
-    return jsonify(users), 200
+    return jsonify(all_users), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
