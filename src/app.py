@@ -58,9 +58,37 @@ def create_user():
     
     request_body_user = request.get_json()
     new_user = User(username=request_body_user["username"], password=request_body_user["password"])
-    db.session(new_user)
+    db.session.add(new_user)
     db.session.commit()
     return jsonify(request_body_user), 200
+
+@app.route('/user/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    
+    request_body_user = request.get_json()
+    
+    user1 = User.query.get(user_id)
+    if user1 is None:
+        raise APIException('User not found', status_code=404)
+    
+    if "username" in request_body_user:
+        user1.username = request_body_user["username"]
+    if "password" in request_body_user:
+        user1.password = request_body_user["password"]
+    db.session.commit()
+    
+    return jsonify(request_body_user), 200
+
+@app.route('/user/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    
+    user1 = User.query.get(user_id)
+    if user1 is None:
+        raise APIException('User not found', status_code=404)
+    db.session.delete(user1)
+    db.session.commit()
+    
+    return jsonify("OK"), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
