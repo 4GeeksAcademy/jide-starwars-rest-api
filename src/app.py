@@ -36,14 +36,15 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-@app.route('/user', methods=['GET'])
-def handle_hello():
-
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
-
-    return jsonify(response_body), 200
+@app.route('/user/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    
+    user = User.query.get(user_id)
+    if user is None:
+        raise APIException('User not found', status_code=404)
+    user_serialize = user.serialize()
+    
+    return jsonify(user_serialize), 200
 
 @app.route('/users', methods=['GET'])
 def handle_users():
@@ -105,6 +106,26 @@ def handle_planets():
     all_planets = list(map(lambda x: x.serialize(), planets))
 
     return jsonify(all_planets), 200
+
+@app.route('/characters/<int:characters_id>', methods=['GET'])
+def get_characters(characters_id):
+    
+    character = Characters.query.get(characters_id)
+    if character is None:
+        raise APIException('Character not found', status_code=404)
+    character_serialize = character.serialize()
+    
+    return jsonify(character_serialize), 200
+
+@app.route('/planets/<int:planets_id>', methods=['GET'])
+def get_planets(planets_id):
+    
+    planet = Planets.query.get(planets_id)
+    if planet is None:
+        raise APIException('Planet not found', status_code=404)
+    planet_serialize = planet.serialize()
+    
+    return jsonify(planet_serialize), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
