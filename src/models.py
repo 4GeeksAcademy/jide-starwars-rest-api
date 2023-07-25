@@ -74,10 +74,10 @@ class Vehicles(db.Model):
     
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    character_id = db.Column(db.Integer, db.ForeignKey("characters.id"))
-    planet_id = db.Column(db.Integer, db.ForeignKey("planets.id"))
-    vehicle_id = db.Column(db.Integer, db.ForeignKey("vehicles.id"))
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    character_id = db.Column(db.Integer, db.ForeignKey("characters.id"), nullable=True)
+    planet_id = db.Column(db.Integer, db.ForeignKey("planets.id"), nullable=True)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey("vehicles.id"), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     # user = db.relationship('User', lazy=True)
 
     def __repr__(self):
@@ -86,6 +86,8 @@ class Favorites(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            # "name": self.name,
+            "user": self.user.serialize(),
+            "planet" : self.planet.serialize(),
+            "character": self.character.serialize()
             # do not serialize the password, its a security breach
         }
